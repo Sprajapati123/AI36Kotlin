@@ -178,6 +178,7 @@ fun ProfileBody(innerPadding: PaddingValues) {
             Text("Followed by jeena and anna")
         }
 
+        Spacer(modifier = Modifier.height(25.dp))
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -228,6 +229,16 @@ fun ProfileBody(innerPadding: PaddingValues) {
                 )
             }
         }
+
+//        Row{
+//            Card(modifier = Modifier.height(200.dp).weight(1f)) {
+//
+//            }
+//            Spacer(modifier = Modifier.width(10.dp))
+//            Card(modifier = Modifier.height(200.dp).weight(3f)){
+//
+//            }
+//        }
     }
 }
 
