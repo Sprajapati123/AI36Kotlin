@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,18 +22,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -124,7 +129,7 @@ fun ProfileBody(innerPadding: PaddingValues) {
                     .height(100.dp)
                     .width(100.dp)
                     .clip(shape = RoundedCornerShape(100.dp)),
-                )
+            )
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -133,15 +138,94 @@ fun ProfileBody(innerPadding: PaddingValues) {
                 Text(text = "Posts")
             }
 
-            Column(  verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(text = "772K")
                 Text(text = "Followers")
             }
-            Column(  verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(text = "714")
                 Text(text = "Following")
+            }
+        }
+
+        Column(
+            modifier = Modifier.padding(
+                horizontal = 15.dp,
+                vertical = 15.dp
+            )
+        ) {
+            Text(
+                "Andrew Queo",
+                style = TextStyle(
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+
+            Text(
+                "Artist",
+                modifier = Modifier.alpha(alpha = 0.5f)
+            )
+
+            Text("DESIGNER")
+            Text("isabella@art.design")
+            Text("Followed by jeena and anna")
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(
+                onClick = {
+                    //TODO when button clicked
+                },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Blue,
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Follow")
+            }
+            OutlinedButton(
+                onClick = {
+
+                }, shape = RoundedCornerShape(10.dp),
+                border = BorderStroke(1.dp, Color.Gray),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black
+                )
+            ) {
+                Text("Message")
+            }
+            OutlinedButton(onClick = {
+
+            },shape = RoundedCornerShape(10.dp),
+                border = BorderStroke(1.dp, Color.Gray),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black
+                )) {
+                Text("Email")
+            }
+            OutlinedButton(onClick = {
+
+            },shape = RoundedCornerShape(10.dp),
+                border = BorderStroke(1.dp, Color.Gray),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black
+                )) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = null
+                )
             }
         }
     }
