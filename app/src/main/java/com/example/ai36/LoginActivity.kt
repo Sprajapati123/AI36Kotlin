@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ai36.ui.theme.AI36Theme
@@ -87,10 +89,11 @@ fun LoginBody(innerPadding: PaddingValues) {
         //email
         OutlinedTextField(
             value = email,
-            onValueChange = {input->
+            onValueChange = { input ->
                 email = input
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 10.dp),
             shape = RoundedCornerShape(12.dp),
             prefix = {
@@ -109,7 +112,7 @@ fun LoginBody(innerPadding: PaddingValues) {
                 focusedContainerColor = Color.Gray.copy(0.2f),
                 unfocusedContainerColor = Color.Gray.copy(0.2f),
 
-            )
+                )
         )
 
 
@@ -117,10 +120,11 @@ fun LoginBody(innerPadding: PaddingValues) {
         //password
         OutlinedTextField(
             value = password,
-            onValueChange = {input->
+            onValueChange = { input ->
                 password = input
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 10.dp),
             shape = RoundedCornerShape(12.dp),
             prefix = {
@@ -131,17 +135,25 @@ fun LoginBody(innerPadding: PaddingValues) {
             },
             suffix = {
                 Icon(
-                    painter = painterResource(R.drawable.baseline_visibility_off_24),
-                    contentDescription = null
+                    painter = painterResource(
+                        if (passwordVisibility) R.drawable.baseline_visibility_off_24 else R.drawable.baseline_visibility_24
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.clickable {
+                        //1
+                        passwordVisibility = !passwordVisibility
+
+                    }
                 )
             },
+//            minLines = 4,
+            visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             placeholder = {
                 Text("*******")
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             ),
-            visualTransformation = PasswordVisualTransformation(),
 //            minLines = 5,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Gray.copy(0.2f),
