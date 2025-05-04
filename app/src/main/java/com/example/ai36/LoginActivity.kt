@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ai36.ui.theme.AI36Theme
@@ -103,11 +105,50 @@ fun LoginBody(innerPadding: PaddingValues) {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
             ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                containerColor = Color.Gray.copy(0.2f)
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Gray.copy(0.2f),
+                unfocusedContainerColor = Color.Gray.copy(0.2f),
+
             )
         )
 
+
+        Spacer(modifier = Modifier.height(20.dp))
+        //password
+        OutlinedTextField(
+            value = password,
+            onValueChange = {input->
+                password = input
+            },
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 10.dp),
+            shape = RoundedCornerShape(12.dp),
+            prefix = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = null
+                )
+            },
+            suffix = {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_visibility_off_24),
+                    contentDescription = null
+                )
+            },
+            placeholder = {
+                Text("*******")
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
+            visualTransformation = PasswordVisualTransformation(),
+//            minLines = 5,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Gray.copy(0.2f),
+                unfocusedContainerColor = Color.Gray.copy(0.2f),
+
+                )
+        )
     }
 }
 
