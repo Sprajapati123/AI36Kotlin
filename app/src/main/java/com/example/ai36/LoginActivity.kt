@@ -140,9 +140,7 @@ fun LoginBody(innerPadding: PaddingValues) {
                     ),
                     contentDescription = null,
                     modifier = Modifier.clickable {
-                        //1
                         passwordVisibility = !passwordVisibility
-
                     }
                 )
             },
