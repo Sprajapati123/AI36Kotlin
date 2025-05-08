@@ -32,6 +32,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -39,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +54,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ai36.ui.theme.AI36Theme
+import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,8 +82,12 @@ fun LoginBody() {
 
     val context = LocalContext.current
 
+    val coroutineScope = rememberCoroutineScope()
+    val snackBarHostScope = remember { SnackbarHostState() }
 
-    Scaffold { innerPadding ->
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackBarHostScope) }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -224,12 +232,9 @@ fun LoginBody() {
                         )
                             .show()
                     } else {
-                        Toast.makeText(
-                            context,
-                            "Invalid credentials",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        coroutineScope.launch {
+                            snackBarHostScope.showSnackbar("Invalid login")
+                        }
                     }
                 }) {
                 Text("Login")
