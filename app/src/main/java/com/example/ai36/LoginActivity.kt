@@ -233,7 +233,8 @@ fun LoginBody() {
                             .show()
                     } else {
                         coroutineScope.launch {
-                            snackBarHostScope.showSnackbar("Invalid login")
+                            snackBarHostScope.showSnackbar("Invalid login",
+                                actionLabel = "Retry")
                         }
                     }
                 }) {
