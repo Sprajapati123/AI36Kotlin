@@ -23,6 +23,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -85,6 +86,8 @@ fun LoginBody() {
     val coroutineScope = rememberCoroutineScope()
     val snackBarHostScope = remember { SnackbarHostState() }
 
+    var showDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackBarHostScope) }
     ) { innerPadding ->
@@ -97,6 +100,35 @@ fun LoginBody() {
         ) {
 
 
+            Button(onClick = { showDialog = true }) {
+                Text("Show AlertDialog")
+            }
+
+            if (showDialog) {
+                AlertDialog(
+                    onDismissRequest = {
+                        showDialog = false
+                    }, // dismiss when clicked outside
+                    confirmButton = {
+                        Button(onClick = {
+                            // Confirm action
+                            showDialog = false
+                        }) {
+                            Text("OK")
+                        }
+                    },
+                    dismissButton = {
+                        Button(onClick = {
+                            // Cancel action
+                            showDialog = false
+                        }) {
+                            Text("Cancel")
+                        }
+                    },
+                    title = { Text(text = "Confirm") },
+                    text = { Text("Are your sure you want to logout.") }
+                )
+            }
             Spacer(modifier = Modifier.height(40.dp))
             Image(
                 painter = painterResource(R.drawable.img),
