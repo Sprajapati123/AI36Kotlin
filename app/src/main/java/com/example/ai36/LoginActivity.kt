@@ -1,5 +1,7 @@
 package com.example.ai36
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -82,6 +84,8 @@ fun LoginBody() {
     }
 
     val context = LocalContext.current
+
+    val activity = context as Activity
 
     val coroutineScope = rememberCoroutineScope()
     val snackBarHostScope = remember { SnackbarHostState() }
@@ -257,6 +261,15 @@ fun LoginBody() {
                     if (email == "ram@gmail.com"
                         && password == "password"
                     ) {
+                        val intent = Intent(context, DashboardActivity::class.java)
+                        //first parameter - key
+                        //second parameter - value
+                        intent.putExtra("email",email)
+                        intent.putExtra("password",password)
+
+                        context.startActivity(intent)
+                        activity.finish()
+
                         Toast.makeText(
                             context,
                             "Login Success",
@@ -265,13 +278,24 @@ fun LoginBody() {
                             .show()
                     } else {
                         coroutineScope.launch {
-                            snackBarHostScope.showSnackbar("Invalid login",
-                                actionLabel = "Retry")
+                            snackBarHostScope.showSnackbar(
+                                "Invalid login",
+                                actionLabel = "Retry"
+                            )
                         }
                     }
                 }) {
                 Text("Login")
             }
+
+            Text(
+                "Don't have an account? Signup",
+                modifier = Modifier.clickable {
+                    val intent = Intent(context, ProfileActivity::class.java)
+                    context.startActivity(intent)
+
+                    activity.finish()
+                })
         }
     }
 }

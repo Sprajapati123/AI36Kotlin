@@ -90,8 +90,6 @@ fun ProfileBody(innerPadding: PaddingValues) {
             .background(color = Color.White)
 
     ) {
-
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
