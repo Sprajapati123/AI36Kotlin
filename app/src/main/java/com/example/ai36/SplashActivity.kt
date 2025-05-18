@@ -1,6 +1,7 @@
 package com.example.ai36
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -42,13 +43,29 @@ fun SplashBody() {
     val context = LocalContext.current
     val activity = context as Activity
 
+    val sharedPreferences = context.getSharedPreferences(
+        "User",
+        Context.MODE_PRIVATE
+    )
+
+    val editor = sharedPreferences.edit()
+
+    val localEmail : String = sharedPreferences.getString("email","").toString()
+
     LaunchedEffect(Unit) {
         delay(2000)
 
+        if(localEmail.isEmpty()){
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+            activity.finish()
+        }else{
+            val intent = Intent(context, DashboardActivity::class.java)
+            context.startActivity(intent)
+            activity.finish()
+        }
 
-        val intent = Intent(context, LoginActivity::class.java)
-        context.startActivity(intent)
-        activity.finish()
+
     }
 
     Scaffold { innerPadding ->

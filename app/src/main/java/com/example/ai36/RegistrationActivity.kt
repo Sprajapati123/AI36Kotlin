@@ -205,25 +205,29 @@ fun RegistrationBody() {
                     containerColor = Color.Gray
                 ),
                 onClick = {
-                    editor.putString("email", email)
-                    editor.putString("password", password)
-                    editor.apply()
 
-                    Toast.makeText(context,
-                        "Registration successful",
-                        Toast.LENGTH_SHORT).show()
+                    val localEmail : String = sharedPreferences.getString("email","").toString()
+
+                    if(localEmail == email){
+                        Toast.makeText(context,
+                            "Email already exists",
+                            Toast.LENGTH_SHORT).show()
+                    }else{
+                        editor.putString("email", email)
+                        editor.putString("password", password)
+                        editor.apply()
+
+                        Toast.makeText(context,
+                            "Registration successful",
+                            Toast.LENGTH_SHORT).show()
+                    }
+
+
                 }) {
                 Text("Register")
             }
 
-            Text(
-                "Don't have an account? Signup",
-                modifier = Modifier.clickable {
-                    val intent = Intent(context, ProfileActivity::class.java)
-                    context.startActivity(intent)
 
-                    activity.finish()
-                })
         }
     }
 }
