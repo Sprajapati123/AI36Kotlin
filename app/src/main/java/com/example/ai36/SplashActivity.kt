@@ -45,6 +45,7 @@ fun SplashBody() {
     LaunchedEffect(Unit) {
         delay(2000)
 
+
         val intent = Intent(context, LoginActivity::class.java)
         context.startActivity(intent)
         activity.finish()
