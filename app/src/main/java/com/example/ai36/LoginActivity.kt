@@ -87,7 +87,7 @@ fun LoginBody() {
 
     val context = LocalContext.current
 
-    val activity = context as Activity
+    val activity = context as? Activity
 
     val coroutineScope = rememberCoroutineScope()
     val snackBarHostScope = remember { SnackbarHostState() }
@@ -273,7 +273,7 @@ fun LoginBody() {
                         intent.putExtra("password",password)
 
                         context.startActivity(intent)
-                        activity.finish()
+                        activity?.finish()
 
                         Toast.makeText(
                             context,
@@ -299,7 +299,7 @@ fun LoginBody() {
                     val intent = Intent(context, RegistrationActivity::class.java)
                     context.startActivity(intent)
 
-                    activity.finish()
+                    activity?.finish()
                 })
         }
     }
