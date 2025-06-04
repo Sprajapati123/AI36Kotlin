@@ -1,4 +1,4 @@
-package com.example.ai36.pages
+package com.example.ai36.view.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

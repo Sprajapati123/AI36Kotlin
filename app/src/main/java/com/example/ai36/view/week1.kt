@@ -1,4 +1,4 @@
-package com.example.ai36
+package com.example.ai36.view
 
 fun main() {
 //    println("hello world")

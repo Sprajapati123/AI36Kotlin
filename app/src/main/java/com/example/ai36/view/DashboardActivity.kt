@@ -1,4 +1,4 @@
-package com.example.ai36
+package com.example.ai36.view
 
 import android.app.Activity
 import android.os.Bundle
@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.ai36.ui.theme.AI36Theme
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
