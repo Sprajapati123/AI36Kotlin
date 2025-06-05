@@ -84,7 +84,14 @@ class UserRepositoryImpl : UserRepository {
         userId: String,
         callback: (Boolean, String) -> Unit
     ) {
-        TODO("Not yet implemented")
+        ref.child(userId).removeValue().addOnCompleteListener {
+            if(it.isSuccessful){
+                callback(true,"User deleted")
+            }else{
+                callback(false,"${it.exception?.message}")
+
+            }
+        }
     }
 
     override fun editProfile(
@@ -92,7 +99,14 @@ class UserRepositoryImpl : UserRepository {
         data: MutableMap<String, Any>,
         callback: (Boolean, String) -> Unit
     ) {
-        TODO("Not yet implemented")
+        ref.child(userId).updateChildren(data).addOnCompleteListener {
+            if(it.isSuccessful){
+                callback(true,"User edited")
+            }else{
+                callback(false,"${it.exception?.message}")
+
+            }
+        }
     }
 
     override fun getCurrentUser(): FirebaseUser? {
