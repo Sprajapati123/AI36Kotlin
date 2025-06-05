@@ -3,8 +3,11 @@ package com.example.ai36.repository
 import com.example.ai36.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class UserRepositoryImpl : UserRepository {
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -110,17 +113,37 @@ class UserRepositoryImpl : UserRepository {
     }
 
     override fun getCurrentUser(): FirebaseUser? {
-        TODO("Not yet implemented")
+        return auth.currentUser
     }
 
     override fun getUserById(
         userId: String,
         callback: (Boolean, String, UserModel?) -> Unit
     ) {
-        TODO("Not yet implemented")
+        ref.child(userId).addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    var users = snapshot.getValue(UserModel::class.java)
+                    if(users != null){
+                        callback(true,"Fetched",users)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(false,error.message,null)
+            }
+
+        })
     }
 
     override fun logout(callback: (Boolean, String) -> Unit) {
-        TODO("Not yet implemented")
+        try {
+            auth.signOut()
+            callback(true,"logout successfully")
+        }catch (e: Exception){
+            callback(false,e.message.toString())
+
+        }
     }
 }
