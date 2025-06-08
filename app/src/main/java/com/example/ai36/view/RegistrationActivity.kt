@@ -76,6 +76,8 @@ fun RegistrationBody() {
 
 
     val context = LocalContext.current
+    val activity = context as? Activity
+
     var firstName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var lastname by remember { mutableStateOf("") }
@@ -87,9 +89,10 @@ fun RegistrationBody() {
     val options = listOf("Nepal", "India", "China")
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) } // to capture textfield size
-    Scaffold {innerPadding->
+    Scaffold { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
                 .padding(horizontal = 10.dp)
                 .fillMaxSize()
                 .background(color = Color.White)
@@ -194,12 +197,26 @@ fun RegistrationBody() {
 
             Button(
                 onClick = {
-                    userViewModel.register(email,password){
-                        success,message,userId->
-                        if(success){
+                    userViewModel.register(email, password) { success, message, userId ->
+                        if (success) {
+                            val model =
+                                UserModel(
+                                    userId,
+                                    firstName, lastname,
+                                    selectedOptionText, email
+                                )
+                            userViewModel.addUserToDatabase(userId, model) {
+                                                                           success, message ->
+                                if (success) {
+                                    Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+                                    activity?.finish()
+                                } else {
+                                    Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
 
-                        }else{
-
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 },
@@ -214,6 +231,6 @@ fun RegistrationBody() {
 
 @Preview
 @Composable
-fun preReg(){
+fun preReg() {
     RegistrationBody()
 }
