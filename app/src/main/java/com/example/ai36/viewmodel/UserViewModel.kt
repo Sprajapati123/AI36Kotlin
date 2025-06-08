@@ -59,9 +59,7 @@ class UserViewModel(val repo: UserRepository) : ViewModel(){
     }
 
     private val _users = MutableLiveData<UserModel?>()
-
     val users : LiveData<UserModel?> get() = _users
-
     fun getUserById(
         userId: String,
     ){
