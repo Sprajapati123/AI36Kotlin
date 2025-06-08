@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseUser
 
 class UserViewModel(val repo: UserRepository) : ViewModel(){
 
-
     fun login(
         email: String,
         password: String, callback: (Boolean, String) -> Unit
@@ -77,6 +76,5 @@ class UserViewModel(val repo: UserRepository) : ViewModel(){
     fun logout(callback: (Boolean, String) -> Unit){
         repo.logout(callback)
     }
-
 
 }
