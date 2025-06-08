@@ -205,18 +205,17 @@ fun RegistrationBody() {
                                     firstName, lastname,
                                     selectedOptionText, email
                                 )
-                            userViewModel.addUserToDatabase(userId, model) {
-                                                                           success, message ->
+                            userViewModel.addUserToDatabase(userId, model) { success, message ->
                                 if (success) {
-                                    Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                     activity?.finish()
                                 } else {
-                                    Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
                                 }
                             }
                         } else {
-                            Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 },

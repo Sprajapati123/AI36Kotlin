@@ -1,6 +1,7 @@
 package com.example.ai36.view
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,16 +33,24 @@ class DashboardActivity : ComponentActivity() {
 @Composable
 fun DashboardBody() {
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = context as? Activity
 
-    val email : String? = activity.intent.getStringExtra("email")
-    Scaffold { innerPadding ->
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                val intent = Intent(context,
+                    AddProductActivity::class.java)
+                context.startActivity(intent)
+            }) {
+                Icon(Icons.Default.Add, contentDescription = null)
+            }
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            Text("Good morning, $email")
 
         }
     }
