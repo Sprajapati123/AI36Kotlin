@@ -57,7 +57,7 @@ class ProductRepositoryImpl : ProductRepository {
                 val allProducts = mutableListOf<ProductModel>()
                 if(snapshot.exists()){
                     for(eachData in snapshot.children){
-                        var products = snapshot.getValue(ProductModel::class.java)
+                        var products = eachData.getValue(ProductModel::class.java)
                         if(products != null){
                             allProducts.add(products)
                         }
