@@ -23,7 +23,6 @@ interface ProductRepository {
         callback: (Boolean, String, List<ProductModel?>) -> Unit
     )
 
-
     fun updateProduct(
         productId: String,
         data: MutableMap<String, Any?>,
