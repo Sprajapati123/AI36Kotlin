@@ -1,5 +1,6 @@
 package com.example.ai36.view
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,9 +21,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.ai36.repository.ProductRepositoryImpl
 import com.example.ai36.view.ui.theme.AI36Theme
+import com.example.ai36.viewmodel.ProductViewModel
 
 class AddProductActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +43,13 @@ fun AddProductBody() {
     var pName by remember { mutableStateOf("") }
     var pPrice by remember { mutableStateOf("") }
     var pDesc by remember { mutableStateOf("") }
+
+    val repo = remember { ProductRepositoryImpl() }
+    val viewModel = remember { ProductViewModel(repo) }
+
+    val context = LocalContext.current
+    val activity = context as? Activity
+
     Scaffold { padding ->
         Column(modifier = Modifier
             .fillMaxSize()
