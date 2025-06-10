@@ -2,6 +2,7 @@ package com.example.ai36.view
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.ai36.model.ProductModel
 import com.example.ai36.repository.ProductRepositoryImpl
 import com.example.ai36.view.ui.theme.AI36Theme
 import com.example.ai36.viewmodel.ProductViewModel
@@ -51,47 +53,56 @@ fun AddProductBody() {
     val activity = context as? Activity
 
     Scaffold { padding ->
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
             OutlinedTextField(
-                value = pName,
-                onValueChange = {
+                value = pName, onValueChange = {
                     pName = it
-                },
-                placeholder = {
+                }, placeholder = {
                     Text("Product name")
-                },
-                modifier = Modifier.fillMaxWidth()
+                }, modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(20.dp))
 
             OutlinedTextField(
-                value = pDesc,
-                onValueChange = {
+                value = pDesc, onValueChange = {
                     pDesc = it
-                },
-                placeholder = {
+                }, placeholder = {
                     Text("Product Description")
-                },
-                modifier = Modifier.fillMaxWidth()
+                }, modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(20.dp))
 
 
             OutlinedTextField(
-                value = pPrice,
-                onValueChange = {
+                value = pPrice, onValueChange = {
                     pPrice = it
-                },
-                placeholder = {
+                }, placeholder = {
                     Text("Product Price")
-                },
-                modifier = Modifier.fillMaxWidth()
+                }, modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(onClick = {}) {
+            Button(onClick = {
+                var model = ProductModel(
+                    productId = "",
+                    productName = pName,
+                    description = pDesc,
+                    price = pPrice.toDouble()
+                )
+
+                viewModel.addProduct(model) { success, msg ->
+                    if (success) {
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            }) {
                 Text("Add product")
             }
 
