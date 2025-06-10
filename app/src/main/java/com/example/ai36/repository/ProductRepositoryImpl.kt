@@ -1,7 +1,11 @@
 package com.example.ai36.repository
 
 import com.example.ai36.model.ProductModel
+import com.example.ai36.model.UserModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class ProductRepositoryImpl : ProductRepository {
     val database = FirebaseDatabase.getInstance()
@@ -30,11 +34,43 @@ class ProductRepositoryImpl : ProductRepository {
         productId: String,
         callback: (Boolean, String, ProductModel?) -> Unit
     ) {
-        TODO("Not yet implemented")
+        ref.child(productId).addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    var products = snapshot.getValue(ProductModel::class.java)
+                    if(products != null){
+                        callback(true,"Fetched",products)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(false,error.message,null)
+            }
+
+        })
     }
 
     override fun getAllProduct(callback: (Boolean, String, List<ProductModel?>) -> Unit) {
-        TODO("Not yet implemented")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val allProducts = mutableListOf<ProductModel>()
+                if(snapshot.exists()){
+                    for(eachData in snapshot.children){
+                        var products = snapshot.getValue(ProductModel::class.java)
+                        if(products != null){
+                            allProducts.add(products)
+                        }
+                    }
+                    callback(true,"fetched",allProducts)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(false,error.message,emptyList())
+            }
+
+        })
     }
 
     override fun updateProduct(
@@ -42,13 +78,27 @@ class ProductRepositoryImpl : ProductRepository {
         data: MutableMap<String, Any?>,
         callback: (Boolean, String) -> Unit
     ) {
-        TODO("Not yet implemented")
+        ref.child(productId).updateChildren(data).addOnCompleteListener {
+            if(it.isSuccessful){
+                callback(true,"Product updated")
+            }else{
+                callback(false,"${it.exception?.message}")
+
+            }
+        }
     }
 
     override fun deleteProduct(
         productId: String,
         callback: (Boolean, String) -> Unit
     ) {
-        TODO("Not yet implemented")
+        ref.child(productId).removeValue().addOnCompleteListener {
+            if(it.isSuccessful){
+                callback(true,"Product deleted")
+            }else{
+                callback(false,"${it.exception?.message}")
+
+            }
+        }
     }
 }
