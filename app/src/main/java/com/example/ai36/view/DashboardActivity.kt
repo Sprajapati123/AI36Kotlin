@@ -3,6 +3,7 @@ package com.example.ai36.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,7 +18,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +61,8 @@ fun DashboardBody() {
     val products = viewModel.allProducts
         .observeAsState(initial = emptyList())
 
+    val loading = viewModel.loading.observeAsState(initial = false)
+
     LaunchedEffect(Unit) {
         viewModel.getAllProduct()
     }
@@ -79,45 +85,71 @@ fun DashboardBody() {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            items(products.value.size) { index ->
-                var data = products.value[index]
-                Card (
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                ){
-                    Column(
-                        modifier = Modifier.padding(10.dp),
 
-                        ) {
-                        Text("${data?.productName}")
-                        Text("${data?.price}")
-                        Text("${data?.description}")
+            if (loading.value == true) {
+                item {
+                    Column (
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        CircularProgressIndicator()
+                    }
+                }
+            } else {
+                items(products.value.size) { index ->
+                    var data = products.value[index]
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(10.dp),
 
-                        Row (
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
-                        ){
-                            IconButton(
-                                onClick = {},
-                                colors = IconButtonDefaults.iconButtonColors(
-                                    contentColor = Color.Gray
-                                )
                             ) {
-                                Icon(Icons.Default.Edit,contentDescription = null)
+                            Text("${data?.productName}")
+                            Text("${data?.price}")
+                            Text("${data?.description}")
 
-                            }
-
-                            IconButton(onClick = {},
-
-                                colors = IconButtonDefaults.iconButtonColors(
-                                    contentColor = Color.Red
-                                )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                IconButton(
+                                    onClick = {},
+                                    colors = IconButtonDefaults.iconButtonColors(
+                                        contentColor = Color.Gray
+                                    )
                                 ) {
-                                Icon(Icons.Default.Delete,contentDescription = null)
+                                    Icon(Icons.Default.Edit, contentDescription = null)
+
+                                }
+
+                                IconButton(
+                                    onClick = {
+                                        viewModel.deleteProduct(data?.productId.toString()) { success, message ->
+                                            if (success) {
+                                                Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                                                    .show()
+                                            } else {
+                                                Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                                                    .show()
+                                            }
+                                        }
+                                    },
+                                    colors = IconButtonDefaults.iconButtonColors(
+                                        contentColor = Color.Red
+                                    )
+                                ) {
+                                    Icon(Icons.Default.Delete, contentDescription = null)
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
     }
 

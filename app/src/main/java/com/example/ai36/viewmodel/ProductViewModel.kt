@@ -6,25 +6,24 @@ import androidx.lifecycle.ViewModel
 import com.example.ai36.model.ProductModel
 import com.example.ai36.repository.ProductRepository
 
-class ProductViewModel(val repo : ProductRepository) : ViewModel() {
+class ProductViewModel(val repo: ProductRepository) : ViewModel() {
     fun addProduct(
         model: ProductModel,
         callback: (Boolean, String) -> Unit
-    ){
-       repo.addProduct(model,callback)
+    ) {
+        repo.addProduct(model, callback)
     }
 
     private val _products = MutableLiveData<ProductModel?>()
-    val products : LiveData<ProductModel?> get() = _products
+    val products: LiveData<ProductModel?> get() = _products
 
     fun getProductById(
         productId: String,
-    ){
-        repo.getProductById(productId){
-            success,message,data->
-            if(success){
+    ) {
+        repo.getProductById(productId) { success, message, data ->
+            if (success) {
                 _products.postValue(data)
-            }else{
+            } else {
                 _products.postValue(null)
 
             }
@@ -32,16 +31,21 @@ class ProductViewModel(val repo : ProductRepository) : ViewModel() {
     }
 
     private val _allProducts = MutableLiveData<List<ProductModel?>>()
-    val allProducts : LiveData<List<ProductModel?>> get() = _allProducts
+    val allProducts: LiveData<List<ProductModel?>> get() = _allProducts
 
-    fun getAllProduct(){
-        repo.getAllProduct {
-            success,msg,data->
-            if(success){
+    var _loading = MutableLiveData<Boolean>()
+    var loading = MutableLiveData<Boolean>()
+        get() = _loading
+
+    fun getAllProduct() {
+        _loading.postValue(true)
+        repo.getAllProduct { success, msg, data ->
+            if (success) {
                 _allProducts.postValue(data)
-            }else{
+                _loading.postValue(false)
+            } else {
                 _allProducts.postValue(emptyList())
-
+                _loading.postValue(false)
             }
         }
     }
@@ -50,14 +54,14 @@ class ProductViewModel(val repo : ProductRepository) : ViewModel() {
         productId: String,
         data: MutableMap<String, Any?>,
         callback: (Boolean, String) -> Unit
-    ){
-        repo.updateProduct(productId,data,callback)
+    ) {
+        repo.updateProduct(productId, data, callback)
     }
 
     fun deleteProduct(
         productId: String,
         callback: (Boolean, String) -> Unit
-    ){
-     repo.deleteProduct(productId,callback)
+    ) {
+        repo.deleteProduct(productId, callback)
     }
 }

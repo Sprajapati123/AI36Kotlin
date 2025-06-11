@@ -25,7 +25,6 @@ class ProductRepositoryImpl : ProductRepository {
                 callback(true,"Product added")
             }else{
                 callback(false,"${it.exception?.message}")
-
             }
         }
     }
@@ -38,9 +37,15 @@ class ProductRepositoryImpl : ProductRepository {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     var products = snapshot.getValue(ProductModel::class.java)
-                    if(products != null){
-                        callback(true,"Fetched",products)
+//                    if(products != null){
+//                        callback(true,"Fetched",products)
+//                    }
+
+                    products?.let {
+                        callback(true,"Fetched",it)
                     }
+
+
                 }
             }
 
