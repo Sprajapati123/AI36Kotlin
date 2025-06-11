@@ -13,6 +13,17 @@
         android:theme="@style/Theme.AI36"
         tools:targetApi="31">
         <activity
+            android:name=".view.UpdateProductActivity"
+            android:exported="true"
+            android:label="@string/title_activity_update_product"
+            android:theme="@style/Theme.AI36">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".view.TestActivity"
             android:exported="true"
             android:label="@string/title_activity_test"

@@ -7,11 +7,15 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -88,10 +92,9 @@ fun DashboardBody() {
 
             if (loading.value == true) {
                 item {
-                    Column (
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    Box (
+                        modifier = Modifier.height(500.dp).fillMaxWidth(),
+                        contentAlignment = Alignment.Center
                     ){
                         CircularProgressIndicator()
                     }
@@ -117,7 +120,11 @@ fun DashboardBody() {
                                 horizontalArrangement = Arrangement.End
                             ) {
                                 IconButton(
-                                    onClick = {},
+                                    onClick = {
+                                        val intent = Intent(context, UpdateProductActivity::class.java)
+                                        intent.putExtra("productId",data?.productId.toString())
+                                        context.startActivity(intent)
+                                    },
                                     colors = IconButtonDefaults.iconButtonColors(
                                         contentColor = Color.Gray
                                     )
