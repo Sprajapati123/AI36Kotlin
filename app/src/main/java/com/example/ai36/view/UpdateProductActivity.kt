@@ -1,11 +1,16 @@
 package com.example.ai36.view
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,26 +29,40 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.ai36.R
 import com.example.ai36.model.ProductModel
 import com.example.ai36.repository.ProductRepositoryImpl
+import com.example.ai36.utils.ImageUtils
 import com.example.ai36.view.ui.theme.AI36Theme
 import com.example.ai36.viewmodel.ProductViewModel
 
 class UpdateProductActivity : ComponentActivity() {
+    lateinit var imageUtils: ImageUtils
+    var selectedImageUri by mutableStateOf<Uri?>(null)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        imageUtils = ImageUtils(this, this)
+        imageUtils.registerLaunchers { uri ->
+            selectedImageUri = uri
+        }
         setContent {
-           UpdateProductBody()
+            UpdateProductBody(
+                selectedImageUri = selectedImageUri,
+                onPickImage = { imageUtils.launchImagePicker() })
         }
     }
 }
 
 @Composable
-fun UpdateProductBody() {
+fun UpdateProductBody( selectedImageUri: Uri?,
+                       onPickImage: () -> Unit) {
     var pName by remember { mutableStateOf("") }
     var pPrice by remember { mutableStateOf("") }
     var pDesc by remember { mutableStateOf("") }
@@ -72,7 +91,46 @@ fun UpdateProductBody() {
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            OutlinedTextField(
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clickable {
+                        onPickImage()
+                    }
+                    .padding(10.dp)
+            ) {
+                when {
+                    selectedImageUri != null -> {
+                        AsyncImage(
+                            model = selectedImageUri,
+                            contentDescription = "Selected Image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+
+                    !products.value?.productImage.isNullOrEmpty() -> {
+                        AsyncImage(
+                            model = products.value!!.productImage,
+                            contentDescription = "Existing Image from DB",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+
+                    else -> {
+                        Image(
+                            painter = painterResource(R.drawable.img),
+                            contentDescription = "Placeholder Image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+            }
+
+        OutlinedTextField(
                 value = pName, onValueChange = {
                     pName = it
                 }, placeholder = {
@@ -101,20 +159,25 @@ fun UpdateProductBody() {
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(onClick = {
-                var data = mutableMapOf<String,Any?>()
+                viewModel.uploadImage(context, selectedImageUri!!) { imageUrl ->
+                    if(imageUrl != null){
+                        var maps = mutableMapOf<String, Any?>()
 
-                data["productId"] = products.value?.productId
-                data["productName"] = pName
-                data["price"] = pPrice.toDouble()
-                data["description"] = pDesc
+                        maps["productId"] = productId
+                        maps["name"] = pName
+                        maps["desc"] = pDesc
+                        maps["price"] = pPrice.toInt()
+                        maps["imageUrl"] = imageUrl
 
-                viewModel.updateProduct(products.value?.productId.toString(),data){
-                    success,msg->
-                    if (success) {
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                        activity?.finish()
-                    } else {
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                        viewModel.updateProduct(productId.toString(), maps) { success, message ->
+                            if (success) {
+                                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                                activity?.finish()
+                            } else {
+                                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+
+                            }
+                        }
                     }
                 }
             }) {
@@ -123,10 +186,14 @@ fun UpdateProductBody() {
 
         }
     }
+
 }
+
 
 @Preview
 @Composable
 fun previewUpdate(){
-    UpdateProductBody()
+    UpdateProductBody(
+        selectedImageUri = null, // or pass a mock Uri if needed
+        onPickImage = {})
 }
