@@ -39,8 +39,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.ai36.repository.ProductRepositoryImpl
 import com.example.ai36.viewmodel.ProductViewModel
 
@@ -109,11 +112,23 @@ fun DashboardBody() {
                     ) {
                         Column(
                             modifier = Modifier.padding(10.dp),
-
                             ) {
-                            Text("${data?.productName}")
-                            Text("${data?.price}")
-                            Text("${data?.description}")
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                AsyncImage(
+                                    model = data?.productImage,
+                                    contentDescription = null,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Column(
+
+                                    modifier = Modifier.weight(3f).padding(10.dp)
+                                ) {
+                                    Text("${data?.productName}", style = TextStyle(fontSize = 20.sp))
+                                    Text("${data?.price}", style = TextStyle(fontSize = 20.sp))
+                                    Text("${data?.description}", style = TextStyle(fontSize = 20.sp))
+                                }
+
+                            }
 
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
