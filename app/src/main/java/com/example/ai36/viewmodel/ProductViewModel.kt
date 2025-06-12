@@ -1,5 +1,7 @@
 package com.example.ai36.viewmodel
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +9,11 @@ import com.example.ai36.model.ProductModel
 import com.example.ai36.repository.ProductRepository
 
 class ProductViewModel(val repo: ProductRepository) : ViewModel() {
+
+    fun uploadImage(context: Context,imageUri: Uri, callback: (String?) -> Unit){
+        repo.uploadImage(context,imageUri,callback)
+    }
+
     fun addProduct(
         model: ProductModel,
         callback: (Boolean, String) -> Unit

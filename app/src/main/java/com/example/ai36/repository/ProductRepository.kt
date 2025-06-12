@@ -1,5 +1,7 @@
 package com.example.ai36.repository
 
+import android.content.Context
+import android.net.Uri
 import com.example.ai36.model.ProductModel
 
 interface ProductRepository {
@@ -34,5 +36,11 @@ interface ProductRepository {
         callback: (Boolean, String) -> Unit
     )
 
+    fun uploadImage(
+        context: Context, imageUri: Uri,
+        callback: (String?) -> Unit
+    )
+
+    fun getFileNameFromUri(context: Context, uri: Uri): String?
 
 }
