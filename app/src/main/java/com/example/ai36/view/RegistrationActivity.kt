@@ -58,6 +58,7 @@ import com.example.ai36.R
 import com.example.ai36.model.UserModel
 import com.example.ai36.repository.UserRepositoryImpl
 import com.example.ai36.viewmodel.UserViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 class RegistrationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +72,7 @@ class RegistrationActivity : ComponentActivity() {
 
 @Composable
 fun RegistrationBody() {
-    val repo = remember { UserRepositoryImpl() }
+    val repo = remember { UserRepositoryImpl(FirebaseAuth.getInstance()) }
     val userViewModel = remember { UserViewModel(repo) }
 
 
